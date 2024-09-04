@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud_gradient"
+    android:gravity="center"
+    android:layout_gravity="center">
+    <TextView
+        android:id="@+id/txtTDL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TO DO LIST"
+        android:fontFamily="@font/exo2bold"
+        android:layout_marginLeft="20dp"
+        android:textColor="#F8E1F6"
+        android:textSize="40sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txttitle"
+        android:layout_below="@+id/txtTDL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="25dp"
+        android:fontFamily="@font/exo2extralight"
+        android:text="D o n ' t  f o r g e t  i t !"
+        android:textColor="#621ABF"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    <Button
+        android:id="@+id/btn_next"
+        android:background="@drawable/button_select"
+        android:layout_alignParentLeft="true"
+        android:textColor="#F8E1F6"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txttitle"
+        android:text="Next >"/>
+
+</RelativeLayout>

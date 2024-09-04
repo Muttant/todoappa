@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/background_dialog">
+        <TextView
+            android:id="@+id/textThem"
+            android:fontFamily="@font/exo2bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="8dp"
+            android:textSize="20sp"
+            android:text="Cập Nhập Công Việc"
+            android:textColor="#000000"/>
+        <LinearLayout
+            android:id="@+id/edit"
+            android:layout_below="@+id/textThem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_edit"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+            <EditText
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorText"
+                android:layout_below="@+id/textThem"
+                android:fontFamily="@font/exo2extralight"
+                android:id="@+id/editTextTenCVEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập công việc..."/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/calendar"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:id="@+id/textDateCVEdit"
+                    android:textColor="@color/colorText"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/editTextTenCV"
+                    android:fontFamily="@font/exo2extralight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập ngày..."/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/time"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:id="@+id/textTimeCVEdit"
+                    android:textColor="@color/colorText"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/textDateCV"
+                    android:fontFamily="@font/exo2extralight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập giờ..."/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="40dp">
+            <Button
+                android:id="@+id/buttonXacNhan"
+                android:background="@drawable/button_select_main"
+                android:layout_weight="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thay đổi"
+
+                android:fontFamily="@font/exo2extralight"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"/>
+            <Button
+                android:id="@+id/buttonHuyEdit"
+                android:background="@drawable/button_select_main"
+                android:layout_weight="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hủy"
+
+                android:fontFamily="@font/exo2extralight"
+                android:layout_toRightOf="@id/buttonThem"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

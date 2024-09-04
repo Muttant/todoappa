@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="DARK MODE"
+        android:id="@+id/tt_darkMode"/>
+    <item android:title="LIGHT MODE"
+        android:id="@+id/tt_lightMode"/>
+    <item android:title="TẤT CẢ"
+        android:id="@+id/tt_all"/>
+    <item android:title="SẮP ĐẾN HẠN"
+        android:id="@+id/tt_coming"/>
+    <item android:title="ĐÃ HOÀN THÀNH"
+        android:id="@+id/tt_done"/>
+</menu>
