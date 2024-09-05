@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
@@ -36,6 +37,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +46,11 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
+
+    public static final DateTimeFormatter DD_MM_YY = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public static final DateTimeFormatter YY_MM_DD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     Database database;
     ListView lvCongViec;
@@ -123,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
             public void onClick(View v) {
                 String tenMoi = edtTenCV.getText().toString().trim();
                 String dateMoi = tvDate.getText().toString().trim();
+                if (!dateMoi.isEmpty()) {
+                    dateMoi = parseFormat(dateMoi, DD_MM_YY, YY_MM_DD);
+                }
                 String timeMoi = tvTime.getText().toString().trim();
 
                 database.QueryData("UPDATE CongViec SET TenCV ='"+tenMoi+"', DateCV = '"+dateMoi+"', TimeCV = '"+timeMoi+"' WHERE Id = '"+ id +"'");
@@ -168,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
             int id = dataCongViec.getInt(0);
             String ten = dataCongViec.getString(1);
             String ngay = dataCongViec.getString(2);
+            if (!ngay.isEmpty()) {
+                ngay = parseFormat(ngay, YY_MM_DD, DD_MM_YY);
+            }
             String gio = dataCongViec.getString(3);
             int isCheck = dataCongViec.getInt(4);
             arrayCongViec.add(new CongViec(id, ten, ngay, gio, isCheck));
@@ -184,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         switch (item.getItemId()){
             case R.id.tt_darkMode:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -200,25 +212,8 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
                 this.updateListView("SELECT * FROM CongViec order by isCheck asc, id desc");
                 break;
             case R.id.tt_coming:
-                this.updateListView("SELECT * FROM CongViec WHERE isCheck = 0 or isCheck is null order by id desc");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    arrayCongViec = arrayCongViec.stream().filter(congViec -> {
-                        try {
-                            if (congViec.getDateCV() == null || congViec.getDateCV().isEmpty()) {
-                                return true;
-                            }
-                            Date end = dateFormat.parse(congViec.getDateCV());
-                            Date now = new Date();
-                            if (end.before(now) && end.after(new Date(now.getTime() + 24 * 60 * 60 * 1000))) {
-                                return true;
-                            }
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                        return false;
-                    }).collect(Collectors.toList());
-                }
-                adapter.notifyDataSetChanged();
+                LocalDate date = LocalDate.now();
+                this.updateListView("SELECT * FROM CongViec WHERE (isCheck = 0 or isCheck is null) and (datecv = '' or(datecv >= '"+date.format(YY_MM_DD)+"' and datecv <= '"+date.plusDays(1).format(YY_MM_DD)+"')) order by id desc");
                 break;
             case R.id.tt_done:
                 this.updateListView("SELECT * FROM CongViec WHERE isCheck = 1 order by id desc");
@@ -265,6 +260,9 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
             public void onClick(View v) {
                 String tencv = edtTen.getText().toString();
                 String datecv = txtDate.getText().toString();
+                if (!datecv.isEmpty()) {
+                    datecv = parseFormat(datecv, DD_MM_YY, YY_MM_DD);
+                }
                 String timecv = txtTime.getText().toString();
 
                 //kiểm tra không nhập gì vào ô editText
@@ -376,5 +374,9 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
     @Override
     public void onClick() {
         this.GetDataCongViec();
+    }
+
+    private static String parseFormat(String input, DateTimeFormatter inputFormatter, DateTimeFormatter outputFormatter) {
+        return LocalDate.parse(input, inputFormatter).format(outputFormatter);
     }
 }
