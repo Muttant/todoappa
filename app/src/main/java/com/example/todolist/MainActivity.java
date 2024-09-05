@@ -109,7 +109,11 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
         tvTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChonGio(tvTime, edtTenCV);
+                if (tvDate.getText().toString().isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Chưa nhập ngày",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ChonGio(tvDate.getText().toString(), tvTime, edtTenCV);
             }
         });
         //bắt sự kiện chọn ngày trong dialog
@@ -271,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
         txtTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChonGio(txtTime, edtTen);
+                ChonGio(txtDate.getText().toString(), txtTime, edtTen);
             }
         });
         //bắt sự kiện chọn ngày
@@ -315,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
     }
 
     //dialog chọn giờ
-    private void ChonGio(final TextView txtTime, final EditText edtTen) {
+    private void ChonGio(String ngay, final TextView txtTime, final EditText edtTen) {
         final Calendar calendar = Calendar.getInstance();
 
         int gio = calendar.get(Calendar.HOUR_OF_DAY);
@@ -324,9 +328,15 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                calendar.set(0,0,0,hourOfDay, minute);
+                LocalDate date;
+                if (ngay.isEmpty()) {
+                    date = LocalDate.now();
+                } else {
+                    date = LocalDate.parse(ngay, DD_MM_YY);
+                }
+                calendar.set(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),hourOfDay, minute);
                 txtTime.setText(simpleDateFormat.format(calendar.getTime()));
-                //setMultipleAlarms(calendar, edtTen);
+                setMultipleAlarms(calendar, edtTen);
             }
         }, gio, phut, true);
         timePickerDialog.show();
@@ -359,11 +369,11 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 MainActivity.this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT
         );
-        manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
         //Tạo thông báo hiển thị trên màn hình
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            int notification = NotificationManager.IMPORTANCE_DEFAULT;
+            int notification = NotificationManager.IMPORTANCE_MAX;
             CharSequence name = "To Do List";
             NotificationChannel channel = new NotificationChannel("TDL_1", name, notification);
             channel.setDescription(edtTen.getText().toString());
@@ -382,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
         notificationIntent.putExtra("message", strMsg);
         notificationIntent.putExtra("title", strTitle);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Hello")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"TDL_1")
                 .setSmallIcon(R.drawable.icon1)
                 .setContentTitle(strTitle)
                 .setContentText(strMsg)
