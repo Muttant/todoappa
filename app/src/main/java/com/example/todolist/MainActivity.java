@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.NotificationCompat;
 
 import android.app.AlarmManager;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
     ImageView imgAdd;
     List<CongViec> arrayCongViec;
     CongViecAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,7 +193,32 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
     //chọn sự kiện Thêm ghi chú trên thanh menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menusearch, menu);
         getMenuInflater().inflate(R.menu.menu_setting, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Toast.makeText(MainActivity.this, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                Toast.makeText(MainActivity.this, "onQueryTextChange", Toast.LENGTH_SHORT).show();
+                updateListView("SELECT * FROM CongViec WHERE tencv like '%"+newText+"%' order by isCheck asc, id desc");
+                return false;
+            }
+        });
+
+//        return super.onCreateOptionsMenu(menu);
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -299,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                 calendar.set(0,0,0,hourOfDay, minute);
                 txtTime.setText(simpleDateFormat.format(calendar.getTime()));
-                setMultipleAlarms(calendar, edtTen);
+                //setMultipleAlarms(calendar, edtTen);
             }
         }, gio, phut, true);
         timePickerDialog.show();
@@ -379,4 +406,27 @@ public class MainActivity extends AppCompatActivity implements IHandleCheckBox {
     private static String parseFormat(String input, DateTimeFormatter inputFormatter, DateTimeFormatter outputFormatter) {
         return LocalDate.parse(input, inputFormatter).format(outputFormatter);
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu){
+//        getMenuInflater().inflate(R.menu.menusearch, menu);
+//        MenuItem menuItem = menu.findItem(R.id.search);
+//        SearchView searchView = (SearchView) menuItem.getActionView();
+//        searchView.setQueryHint("Search here");
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                return false;
+//            }
+//        });
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 }

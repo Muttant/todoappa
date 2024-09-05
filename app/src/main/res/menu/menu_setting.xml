@@ -11,4 +11,11 @@
         android:id="@+id/tt_coming"/>
     <item android:title="ĐÃ HOÀN THÀNH"
         android:id="@+id/tt_done"/>
+
+    <item
+        android:id="@+id/search"
+        android:title="Serach"
+        android:icon="@drawable/baseline_search_24"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
 </menu>
